@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# build
+dist
+
+# IDE
+/.idea
+/.awcache
+/.vscode
+
+# misc
+.DS_Store
+npm-debug.log
+yarn-error.log
+/**/npm-debug.log
+
+# tests
+/coverage

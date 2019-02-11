@@ -1,0 +1,41 @@
+{
+  "name": "qontojs",
+  "version": "0.1.0",
+  "description": "Qonto api wrapper for nodejs (javascript/typescript)",
+  "keywords": [
+    "qonto",
+    "qontojs",
+    "qontopi",
+    "api",
+    "transactions",
+    "bank",
+    "account"
+  ],
+  "author": "Adrien de Peretti<adrien.deperetti@gmail.com>",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "test": "node_modules/.bin/jest",
+    "test:cov": "node_modules/.bin/jest --coverage",
+    "lint": "node_modules/.bin/tslint -c tslint.json 'src/**/*.ts'",
+    "format": "node_modules/.bin/prettier 'src/**/*.ts' --ignore-path ./.prettierignore --write",
+    "format:check": "node_modules/.bin/prettier 'src/**/*.ts' --ignore-path ./.prettierignore --write --check",
+    "clean": "npm run tslint && npm run prettier",
+    "build": "npm run format && npm run lint && rm -rf dist && node_modules/.bin/tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@types/node": "^10.12.21",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "typescript": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.0",
+    "jest": "^24.1.0",
+    "nock": "^10.0.6",
+    "prettier": "1.16.4",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.1"
+  }
+}

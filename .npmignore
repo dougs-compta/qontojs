@@ -1,0 +1,20 @@
+# source
+**/*.ts
+*.ts
+
+# definitions
+!**/*.d.ts
+!*.d.ts
+
+# coverage & test
+jest.config.js
+src/**/__test__
+coverage
+
+# configuration
+package-lock.json
+tslint.json
+tsconfig.json
+tsconfig.build.json
+.prettierrc
+.prettierrcignore
