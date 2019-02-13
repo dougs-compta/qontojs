@@ -36,7 +36,7 @@ export class Attachment {
                 if (err) reject(err);
                 if (res.statusCode !== 200) reject(res.statusMessage);
                 return resolve(res);
-            })
+            });
         });
     }
 
