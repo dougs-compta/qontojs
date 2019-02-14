@@ -5,7 +5,7 @@ import { TransactionsCollection } from './TransactionsCollection';
 export class BankAccount {
     private credentials: ICredentials;
 
-    public readonly id: string;
+    public readonly slug: string;
     public readonly currency: string;
     public readonly balance: number;
     public readonly balanceCents: number;
@@ -17,7 +17,7 @@ export class BankAccount {
 
     constructor(data: IBankAccount, credentials: ICredentials) {
         this.credentials = credentials;
-        this.id = data.slug;
+        this.slug = data.slug;
         this.iban = data.iban;
         this.bic = data.bic;
         this.currency = data.currency;
