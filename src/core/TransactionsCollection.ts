@@ -99,7 +99,7 @@ export class TransactionsCollection extends Array<Transaction> {
         const { transactions: rawTransactions, meta } = await rp({
             uri: `${HOSTNAME}/${TRANSACTIONS_PATH}`,
             qs: {
-                slug: this.bankAccount.id,
+                slug: this.bankAccount.slug,
                 iban: this.bankAccount.iban,
                 per_page: fetchOptions.perPage,
                 current_page: fetchOptions.currentPage,
