@@ -31,13 +31,13 @@ export class Attachment {
      * @return {Promise<"stream".internal.Readable>}
      */
     public async downloadAsStream(): Promise<stream.Readable> {
-        return await new Promise((resolve, reject) => {
+        return (await new Promise((resolve, reject) => {
             return request(this.url, (err, res) => {
                 if (err) reject(err);
                 if (res.statusCode !== 200) reject(res.statusMessage);
                 return resolve(res);
             });
-        });
+        })) as stream.Readable;
     }
 
     /***

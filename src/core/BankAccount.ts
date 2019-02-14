@@ -5,19 +5,19 @@ import { TransactionsCollection } from './TransactionsCollection';
 export class BankAccount {
     private credentials: ICredentials;
 
-    public readonly slug: string;
-    public readonly iban: string;
-    public readonly bic: string;
+    public readonly id: string;
     public readonly currency: string;
     public readonly balance: number;
     public readonly balanceCents: number;
     public readonly authorizedBalance: number;
     public readonly authorizedBalanceCents: number;
     public readonly transactionsCollection: TransactionsCollection;
+    public readonly iban: string;
+    public readonly bic: string;
 
     constructor(data: IBankAccount, credentials: ICredentials) {
         this.credentials = credentials;
-        this.slug = data.slug;
+        this.id = data.slug;
         this.iban = data.iban;
         this.bic = data.bic;
         this.currency = data.currency;

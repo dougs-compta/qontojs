@@ -28,6 +28,14 @@
     "build": "npm run format && npm run lint && rm -rf dist && node_modules/.bin/tsc -p tsconfig.build.json",
     "publish": "npm publish --access public"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dougs-compta/qontojs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dougs-compta/qontojs/issues"
+  },
+  "homepage": "https://github.com/dougs-compta/qontojs#readme",
   "dependencies": {
     "@types/node": "^10.12.21",
     "request": "^2.88.0",
@@ -42,12 +50,21 @@
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dougs-compta/qontojs.git"
-  },
-  "bugs": {
-    "url": "https://github.com/dougs-compta/qontojs/issues"
-  },
-  "homepage": "https://github.com/dougs-compta/qontojs#readme"
+  "jest": {
+    "rootDir": "./",
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules/",
+      "__tests__/"
+    ],
+    "coverageReporters": [
+      "lcov"
+    ],
+    "coverageDirectory": "coverage",
+    "collectCoverage": true
+  }
 }
