@@ -1,6 +1,6 @@
 import { IBankAccount } from '../interfaces/bankAccount.interface';
 import { ICredentials } from '../interfaces/credentials.interface';
-import { TransactionCollection } from './TransactionCollection';
+import { TransactionCollection } from "./TransactionCollection";
 
 export class BankAccount {
     private credentials: ICredentials;
