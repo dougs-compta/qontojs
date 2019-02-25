@@ -17,6 +17,10 @@ export const activateNockInterceptor = () => {
         .reply(200, transactionsJson);
 
     nock(HOSTNAME)
+        .get(new RegExp(`/${TRANSACTIONS_PATH}`))
+        .reply(200, transactionsJson);
+
+    nock(HOSTNAME)
         .get(new RegExp(`/${ATTACHMENTS_PATH}`))
         .reply(200, attachmentJson);
 };

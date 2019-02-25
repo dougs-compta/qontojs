@@ -12,7 +12,7 @@ export class Transaction {
     public readonly amountCents: number;
     public readonly attachmentIds: string[];
     public readonly currency: string;
-    public readonly emittedAt: string;
+    public readonly emittedAt: Date;
     public readonly label: string;
     public readonly localAmount: number;
     public readonly localAmountCents: number;
@@ -20,11 +20,11 @@ export class Transaction {
     public readonly note: string;
     public readonly operationType: string;
     public readonly reference: string;
-    public readonly settledAt: string;
+    public readonly settledAt: Date;
     public readonly side: string;
     public readonly status: string;
     public readonly transactionId: string;
-    public readonly updatedAt: string;
+    public readonly updatedAt: Date;
     public readonly vatAmount: number;
     public readonly vatAmountCents: number;
     public readonly vatRate: number;

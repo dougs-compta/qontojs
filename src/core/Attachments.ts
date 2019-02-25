@@ -7,7 +7,7 @@ import { Transaction } from './Transaction';
 export class Attachment {
     public readonly transaction: Transaction;
     public readonly id: string;
-    public readonly createdAt: string;
+    public readonly createdAt: Date;
     public readonly fileName: string;
     public readonly fileSize: string;
     public readonly fileContentType: string;

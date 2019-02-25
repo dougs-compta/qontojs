@@ -12,8 +12,8 @@
     "account"
   ],
   "author": "Adrien de Peretti <adrien.deperetti@gmail.com>",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "/lib"
   ],
@@ -24,8 +24,8 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "format": "prettier 'src/**/*.ts' --ignore-path ./.prettierignore --write",
     "format:check": "prettier 'src/**/*.ts' --ignore-path ./.prettierignore --write --check",
-    "clean": "npm run tslint && npm run prettier",
-    "build": "npm run format && npm run lint && rm -rf dist && node_modules/.bin/tsc -p tsconfig.build.json",
+    "clean": "npm run lint && npm run format",
+    "build": "npm run format && npm run lint && rm -rf lib && node_modules/.bin/tsc -p tsconfig.build.json",
     "publish": "npm publish --access public"
   },
   "repository": {
