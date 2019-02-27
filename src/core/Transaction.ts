@@ -5,11 +5,14 @@ import { ICredentials } from '../interfaces/credentials.interface';
 import { ITransaction } from '../interfaces/transaction.interface';
 
 export class Transaction {
+    private credentials: ICredentials;
+    private _attachments: Attachment[] = [];
+
     public readonly amount: number;
     public readonly amountCents: number;
     public readonly attachmentIds: string[];
     public readonly currency: string;
-    public readonly emittedAt: string;
+    public readonly emittedAt: Date;
     public readonly label: string;
     public readonly localAmount: number;
     public readonly localAmountCents: number;
@@ -17,15 +20,18 @@ export class Transaction {
     public readonly note: string;
     public readonly operationType: string;
     public readonly reference: string;
-    public readonly settledAt: string;
+    public readonly settledAt: Date;
     public readonly side: string;
     public readonly status: string;
     public readonly transactionId: string;
-    public readonly updatedAt: string;
+    public readonly updatedAt: Date;
     public readonly vatAmount: number;
     public readonly vatAmountCents: number;
     public readonly vatRate: number;
-    private credentials: ICredentials;
+
+    public get attachments(): Attachment[] {
+        return this._attachments;
+    }
 
     constructor(data: ITransaction, credentials: ICredentials) {
         this.credentials = credentials;
@@ -49,12 +55,6 @@ export class Transaction {
         this.vatAmount = data.vat_amount;
         this.vatAmountCents = data.vat_amount_cents;
         this.vatRate = data.vat_rate;
-    }
-
-    private _attachments: Attachment[] = [];
-
-    public get attachments(): Attachment[] {
-        return this._attachments;
     }
 
     /**

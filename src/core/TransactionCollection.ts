@@ -6,97 +6,58 @@ import { ITransaction } from '../interfaces/transaction.interface';
 import { ITransactionsFetchOptions } from '../interfaces/transactionsOptions.interface';
 import { Transaction } from './Transaction';
 
-export class TransactionsCollection extends Array<Transaction> {
+export class TransactionCollection extends Array<Transaction> {
     private credentials: ICredentials;
     private bankAccount: BankAccount;
 
+    private nextPage: number = 1;
+    private prevPage: number = null;
+    private fetchOptions: ITransactionsFetchOptions = {};
+
     public get hasNext(): boolean {
         return !!this.nextPage;
-    }
-
-    private _currentPage: number = 1;
-
-    public get currentPage(): number {
-        return this._currentPage;
-    }
-
-    private _nextPage: number = 1;
-
-    public get nextPage(): number {
-        return this._nextPage;
-    }
-
-    private _prevPage: number = null;
-
-    public get prevPage(): number {
-        return this._prevPage;
-    }
-
-    private _totalCount: number = null;
-
-    public get totalCount(): number {
-        return this._totalCount;
-    }
-
-    private _totalPages: number = null;
-
-    public get totalPages(): number {
-        return this._totalPages;
     }
 
     constructor(credentials: ICredentials, bankAccount: BankAccount) {
         super();
         this.credentials = credentials;
         this.bankAccount = bankAccount;
+        this.setFetchOptions();
     }
 
     /***
      * Return the transactions located on the next
      * page and store the new transactions in the actual repository.
      * ```typescript
-     *      await bankAccount.transactionRepository.fetchNextPage();
-     *      for (const transaction of bankAccount.transactionRepository) {
-     *          await transaction.fetchAttachments();
-     *      }
+     *      bankAccount.transactionCollection.setFetchOptions(options);
      * ```
      * @param {ITransactionsFetchOptions} fetchOptions
      * @return {Promise<this>}
      */
-    public async fetchNextPage(fetchOptions: ITransactionsFetchOptions = {}): Promise<this> {
-        if (!this.hasNext) {
-            this.length = 0;
-            return this;
-        }
-        fetchOptions = fetchOptions || {};
-        return await this._fetch({
-            currentPage: this.nextPage,
-            perPage: 100,
-            ...fetchOptions
-        });
+    public setFetchOptions(fetchOptions: ITransactionsFetchOptions = {}) {
+        this.length = 0;
+        this.fetchOptions = fetchOptions || {};
+        this.nextPage = 1;
+        this.prevPage = null;
     }
 
     /***
-     * Return the transactions located on the previous
+     * Return the transactions located on the next
      * page and store the new transactions in the actual repository.
      * ```typescript
-     *      await bankAccount.transactionRepository.fetchPrevPage();
-     *      for (const transaction of bankAccount.transactionRepository) {
+     *      await bankAccount.transactionCollection.fetchNextPage();
+     *      for (const transaction of bankAccount.transactionCollection) {
      *          await transaction.fetchAttachments();
      *      }
      * ```
-     * @param {ITransactionsFetchOptions} fetchOptions
      * @return {Promise<this>}
      */
-    public async fetchPrevPage(fetchOptions?: ITransactionsFetchOptions): Promise<this> {
-        if (!this.prevPage) {
-            this.length = 0;
-            return this;
-        }
-        fetchOptions = fetchOptions || {};
+    public async fetchNextPage(): Promise<this> {
+        if (!this.hasNext) return this;
         return await this._fetch({
-            currentPage: this.prevPage,
-            perPage: 100,
-            ...fetchOptions
+            ...this.fetchOptions,
+            currentPage: this.nextPage,
+            perPage: 100
         });
     }
 
@@ -133,11 +94,8 @@ export class TransactionsCollection extends Array<Transaction> {
             })
         );
 
-        this._nextPage = meta.next_page;
-        this._currentPage = meta.current_page;
-        this._totalPages = meta.total_pages;
-        this._totalCount = meta.total_count;
-        this._prevPage = meta.prev_page;
+        this.nextPage = meta.next_page;
+        this.prevPage = meta.prev_page;
 
         return this;
     }
