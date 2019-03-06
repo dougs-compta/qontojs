@@ -56,7 +56,6 @@ export class TransactionCollection extends Array<Transaction> {
         if (!this.hasNext) return this;
         return await this._fetch({
             ...this.fetchOptions,
-            currentPage: this.nextPage,
             perPage: 100
         });
     }
@@ -67,16 +66,19 @@ export class TransactionCollection extends Array<Transaction> {
      * @return {Promise<this>}
      * @private
      */
-    private async _fetch(fetchOptions: ITransactionsFetchOptions & { currentPage }): Promise<this> {
+    private async _fetch(fetchOptions: ITransactionsFetchOptions): Promise<this> {
         const { transactions: rawTransactions, meta } = await rp({
             uri: `${HOSTNAME}/${TRANSACTIONS_PATH}`,
             qs: {
                 slug: this.bankAccount.slug,
                 iban: this.bankAccount.iban,
                 per_page: fetchOptions.perPage,
-                current_page: fetchOptions.currentPage,
+                current_page: this.nextPage,
                 status: fetchOptions.status,
-                filters: fetchOptions.filters,
+                filters: {
+                    updated_at_from: fetchOptions.filters && fetchOptions.filters.updatedAtFrom,
+                    updated_at_to: fetchOptions.filters && fetchOptions.filters.updatedAtTo
+                },
                 sortBy: fetchOptions.sortBy
             },
             method: 'GET',
