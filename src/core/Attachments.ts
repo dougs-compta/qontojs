@@ -1,7 +1,9 @@
 import * as request from 'request';
 import * as rp from 'request-promise';
 import * as stream from 'stream';
+import { ATTACHMENTS_PATH, HOSTNAME } from "../constant";
 import { IAttachment } from '../interfaces/attachment.interface';
+import { ICredentials } from "../interfaces/credentials.interface";
 import { Transaction } from './Transaction';
 
 export class Attachment {
@@ -21,6 +23,20 @@ export class Attachment {
         this.fileSize = data.file_size;
         this.fileContentType = data.file_content_type;
         this.url = data.url;
+    }
+
+    static async get(id: string, credentials: ICredentials): Promise<Attachment> {
+        const { attachment: rawAttachment } = await rp({
+            uri: `${HOSTNAME}/${ATTACHMENTS_PATH}/${id}`,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${credentials.slug}:${credentials.secretKey}`
+            },
+            json: true
+        });
+        if (!rawAttachment) throw new Error('Unable to find the attachment with the id ' + id);
+        return new Attachment(rawAttachment, null);
     }
 
     /***
