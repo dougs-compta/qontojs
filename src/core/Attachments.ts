@@ -1,9 +1,9 @@
 import * as request from 'request';
 import * as rp from 'request-promise';
 import * as stream from 'stream';
-import { ATTACHMENTS_PATH, HOSTNAME } from "../constant";
+import { ATTACHMENTS_PATH, HOSTNAME } from '../constant';
 import { IAttachment } from '../interfaces/attachment.interface';
-import { ICredentials } from "../interfaces/credentials.interface";
+import { ICredentials } from '../interfaces/credentials.interface';
 import { Transaction } from './Transaction';
 
 export class Attachment {
@@ -44,7 +44,7 @@ export class Attachment {
      * ```typescript
      *      const fileStream = await attachment.downloadAsStream();
      * ```
-     * @return {Promise<"stream".internal.Readable>}
+     * @return {Promise<'stream'.internal.Readable>}
      */
     public async downloadAsStream(): Promise<stream.Readable> {
         return (await new Promise((resolve, reject) => {
@@ -61,7 +61,7 @@ export class Attachment {
      * ```typescript
      *      const fileBuffer = await attachment.downloadAsBuffer();
      * ```
-     * @return {Promise<"stream".internal.Readable>}
+     * @return {Promise<'stream'.internal.Readable>}
      */
     public async downloadAsBuffer(): Promise<Buffer> {
         return await rp(this.url).then(res => new Buffer(res));
