@@ -3,7 +3,7 @@ import * as rp from 'request-promise';
 import { ATTACHMENTS_PATH, HOSTNAME } from '../constant';
 import { IAttachment } from '../interfaces/attachment.interface';
 import { ICredentials } from '../interfaces/credentials.interface';
-import { PassThrough } from "stream";
+import { PassThrough } from 'stream';
 
 export class Attachment {
     public readonly id: string;
@@ -41,7 +41,7 @@ export class Attachment {
      * ```typescript
      *      const fileStream = await attachment.downloadAsStream();
      * ```
-     * @return {"stream".internal.PassThrough}
+     * @return {''stream''.internal.PassThrough}
      */
     public downloadAsStream(): PassThrough {
         const passThrough = new PassThrough();
