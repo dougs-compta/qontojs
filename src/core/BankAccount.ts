@@ -1,3 +1,5 @@
+import * as rp from 'request-promise';
+import { HOSTNAME, ORGANIZATION_PATH } from '../constant';
 import { IBankAccount } from '../interfaces/bankAccount.interface';
 import { ICredentials } from '../interfaces/credentials.interface';
 import { TransactionCollection } from './TransactionCollection';
@@ -26,5 +28,18 @@ export class BankAccount {
         this.authorizedBalance = data.authorized_balance;
         this.authorizedBalanceCents = data.authorized_balance_cents;
         this.transactionCollection = new TransactionCollection(this.credentials, this);
+    }
+
+    static async fetch(credentials: ICredentials): Promise<BankAccount[]> {
+        const { organization } = await rp({
+            uri: `${HOSTNAME}/${ORGANIZATION_PATH}/${credentials.slug}`,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${credentials.slug}:${credentials.secretKey}`
+            },
+            json: true
+        });
+        return organization.bank_accounts.map(bankAccount => new BankAccount(bankAccount, credentials));
     }
 }

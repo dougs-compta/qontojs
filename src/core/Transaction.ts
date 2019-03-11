@@ -1,6 +1,4 @@
-import * as rp from 'request-promise';
 import { Attachment } from './Attachments';
-import { ATTACHMENTS_PATH, HOSTNAME } from '../constant';
 import { ICredentials } from '../interfaces/credentials.interface';
 import { ITransaction } from '../interfaces/transaction.interface';
 
@@ -67,16 +65,8 @@ export class Transaction {
     public async fetchAttachments(): Promise<Attachment[]> {
         for (const attachmentId of this.attachmentIds) {
             this._attachments = [];
-            const { attachment: rawAttachment } = await rp({
-                uri: `${HOSTNAME}/${ATTACHMENTS_PATH}/${attachmentId}`,
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `${this.credentials.slug}:${this.credentials.secretKey}`
-                },
-                json: true
-            });
-            if (rawAttachment) this._attachments.push(new Attachment(rawAttachment, this));
+            const attachment = await Attachment.get(attachmentId, this.credentials);
+            if (attachment) this._attachments.push(attachment);
         }
 
         return this._attachments;
