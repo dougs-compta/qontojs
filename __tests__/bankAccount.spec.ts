@@ -1,6 +1,6 @@
 import * as httpRequestMock from './mocks/httpInterceptor.mock';
 import * as stream from 'stream';
-import { Client } from '../src';
+import { BankAccount } from '../src';
 import { ICredentials } from '../src/interfaces/credentials.interface';
 
 const credentials: ICredentials = {
@@ -9,45 +9,28 @@ const credentials: ICredentials = {
 };
 const bankAccountSlug = 'qonto-tati-17-bank-account-1';
 
-describe('The client', function() {
+describe('The BankAccount', function() {
     beforeEach(() => httpRequestMock.activateNockInterceptor());
     afterAll(() => httpRequestMock.turnOff());
     it('should be able to return all the accounts for an organization', async function() {
-        const client = new Client(credentials);
-        const bankAccounts = await client.getBankAccounts();
-
-        expect(client).toBeTruthy();
+        const bankAccounts = await BankAccount.fetch(credentials);
         expect(bankAccounts.length).toEqual(1);
     });
 
     it('should be able to return the asked account', async function() {
-        const client = new Client(credentials);
-        const bankAccount = await client.getBankAccount(bankAccountSlug);
+        const bankAccounts = await BankAccount.fetch(credentials);
+        const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
 
         expect(bankAccount).toBeTruthy();
         expect(bankAccount.slug).toEqual(bankAccountSlug);
-    });
-
-    it('should throw if the asked bank account doesn\'t exist', async function() {
-        const fakeSlug = 'qonto-fake-17-bank-account-1';
-        const client = new Client(credentials);
-
-        let error;
-        try {
-            await client.getBankAccount(fakeSlug);
-        } catch (e) {
-            error = e;
-        }
-
-        expect(error.message).toEqual('Unable to find the bank account wit the slug ' + fakeSlug);
     });
 
     describe('The bankAccount', function() {
         it('should be able to fetch transactions using pagination', async function() {
             jest.setTimeout(15000);
 
-            const client = new Client(credentials);
-            const bankAccount = await client.getBankAccount(bankAccountSlug);
+            const bankAccounts = await BankAccount.fetch(credentials);
+            const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
 
             expect(bankAccount.transactionCollection.length).toEqual(0);
             expect(bankAccount.transactionCollection.hasNext).toEqual(true);
@@ -64,8 +47,8 @@ describe('The client', function() {
         });
 
         it('should be able to fetch transactions filtered by status', async function() {
-            const client = new Client(credentials);
-            const bankAccount = await client.getBankAccount(bankAccountSlug);
+            const bankAccounts = await BankAccount.fetch(credentials);
+            const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
             bankAccount.transactionCollection.setFetchOptions({
                 status: ['completed']
             });
@@ -78,8 +61,9 @@ describe('The client', function() {
 
     describe('The transaction', function() {
         it('should be able to fetch its attachments', async function() {
-            const client = new Client(credentials);
-            const transactions = await (await client.getBankAccount(bankAccountSlug)).transactionCollection.fetchNextPage();
+            const bankAccounts = await BankAccount.fetch(credentials);
+            const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
+            const transactions = await bankAccount.transactionCollection.fetchNextPage();
             const transactionWithAttachments = transactions.find(t => !!t.attachmentIds.length);
             const attachments = await transactionWithAttachments.fetchAttachments();
 
@@ -89,8 +73,9 @@ describe('The client', function() {
         });
 
         it('should be able to download an attachment as a buffer', async function() {
-            const client = new Client(credentials);
-            const transactions = await (await client.getBankAccount(bankAccountSlug)).transactionCollection.fetchNextPage();
+            const bankAccounts = await BankAccount.fetch(credentials);
+            const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
+            const transactions = await bankAccount.transactionCollection.fetchNextPage();
             const transactionWithAttachments = transactions.find(t => !!t.attachmentIds.length);
             await transactionWithAttachments.fetchAttachments();
             const buffer = await transactionWithAttachments.attachments[0].downloadAsBuffer();
@@ -100,8 +85,9 @@ describe('The client', function() {
         });
 
         it('should be able to download an attachment as a stream', async function() {
-            const client = new Client(credentials);
-            const transactions = await (await client.getBankAccount(bankAccountSlug)).transactionCollection.fetchNextPage();
+            const bankAccounts = await BankAccount.fetch(credentials);
+            const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
+            const transactions = await bankAccount.transactionCollection.fetchNextPage();
             const transactionWithAttachments = transactions.find(t => !!t.attachmentIds.length);
             await transactionWithAttachments.fetchAttachments();
             const fileStream = await transactionWithAttachments.attachments[0].downloadAsStream();

@@ -1,13 +1,11 @@
 import * as request from 'request';
 import * as rp from 'request-promise';
-import * as stream from 'stream';
 import { ATTACHMENTS_PATH, HOSTNAME } from '../constant';
 import { IAttachment } from '../interfaces/attachment.interface';
 import { ICredentials } from '../interfaces/credentials.interface';
-import { Transaction } from './Transaction';
+import { PassThrough } from "stream";
 
 export class Attachment {
-    public readonly transaction: Transaction;
     public readonly id: string;
     public readonly createdAt: Date;
     public readonly fileName: string;
@@ -15,8 +13,7 @@ export class Attachment {
     public readonly fileContentType: string;
     public readonly url: string;
 
-    constructor(data: IAttachment, transaction: Transaction) {
-        this.transaction = transaction;
+    constructor(data: IAttachment) {
         this.id = data.id;
         this.createdAt = data.created_at;
         this.fileName = data.file_name;
@@ -36,7 +33,7 @@ export class Attachment {
             json: true
         });
         if (!rawAttachment) throw new Error('Unable to find the attachment with the id ' + id);
-        return new Attachment(rawAttachment, null);
+        return new Attachment(rawAttachment);
     }
 
     /***
@@ -44,16 +41,12 @@ export class Attachment {
      * ```typescript
      *      const fileStream = await attachment.downloadAsStream();
      * ```
-     * @return {Promise<'stream'.internal.Readable>}
+     * @return {"stream".internal.PassThrough}
      */
-    public async downloadAsStream(): Promise<stream.Readable> {
-        return (await new Promise((resolve, reject) => {
-            return request(this.url, (err, res) => {
-                if (err) reject(err);
-                if (res.statusCode !== 200) reject(res.statusMessage);
-                return resolve(res);
-            });
-        })) as stream.Readable;
+    public downloadAsStream(): PassThrough {
+        const passThrough = new PassThrough();
+        request(this.url).pipe(passThrough);
+        return passThrough;
     }
 
     /***
@@ -61,7 +54,7 @@ export class Attachment {
      * ```typescript
      *      const fileBuffer = await attachment.downloadAsBuffer();
      * ```
-     * @return {Promise<'stream'.internal.Readable>}
+     * @return {Promise<Buffer>}
      */
     public async downloadAsBuffer(): Promise<Buffer> {
         return await rp(this.url).then(res => new Buffer(res));
