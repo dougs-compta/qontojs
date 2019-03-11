@@ -1,6 +1,6 @@
 {
   "name": "@dougs-compta/qontojs",
-  "version": "0.2.4",
+  "version": "1.0.0",
   "description": "Qonto api wrapper for nodejs (javascript/typescript)",
   "keywords": [
     "qonto",
