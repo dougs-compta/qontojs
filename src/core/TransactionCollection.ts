@@ -5,6 +5,7 @@ import { ICredentials } from '../interfaces/credentials.interface';
 import { ITransaction } from '../interfaces/transaction.interface';
 import { ITransactionsFetchOptions } from '../interfaces/transactionsOptions.interface';
 import { Transaction } from './Transaction';
+import { omit } from 'lodash';
 
 export class TransactionCollection extends Array<Transaction> {
     private credentials: ICredentials;
@@ -58,6 +59,10 @@ export class TransactionCollection extends Array<Transaction> {
             ...this.fetchOptions,
             perPage: 100
         });
+    }
+
+    public toJSON(): Partial<TransactionCollection> {
+        return omit(this, ['credentials']);
     }
 
     /***

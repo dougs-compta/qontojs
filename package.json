@@ -27,7 +27,7 @@
     "clean": "npm run lint && npm run format",
     "build": "npm run format && npm run lint && rm -rf lib && node_modules/.bin/tsc -p tsconfig.build.json",
     "prepublish": "npm run build",
-    "pub": "npm publish --access public"
+    "publish:prod": "npm publish --access public"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,9 @@
   },
   "homepage": "https://github.com/dougs-compta/qontojs#readme",
   "dependencies": {
+    "@types/lodash": "^4.14.123",
     "@types/node": "^10.12.21",
+    "lodash": "^4.17.11",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   },

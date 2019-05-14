@@ -1,6 +1,7 @@
 import { Attachment } from './Attachments';
 import { ICredentials } from '../interfaces/credentials.interface';
 import { ITransaction } from '../interfaces/transaction.interface';
+import { omit } from 'lodash';
 
 export class Transaction {
     private credentials: ICredentials;
@@ -70,5 +71,9 @@ export class Transaction {
         }
 
         return this._attachments;
+    }
+
+    public toJSON(): Partial<Transaction> {
+        return omit(this, ['credentials']);
     }
 }

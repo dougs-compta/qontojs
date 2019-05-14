@@ -3,6 +3,7 @@ import { HOSTNAME, ORGANIZATION_PATH } from '../constant';
 import { IBankAccount } from '../interfaces/bankAccount.interface';
 import { ICredentials } from '../interfaces/credentials.interface';
 import { TransactionCollection } from './TransactionCollection';
+import { omit } from 'lodash';
 
 export class BankAccount {
     private credentials: ICredentials;
@@ -41,5 +42,9 @@ export class BankAccount {
             json: true
         });
         return organization.bank_accounts.map(bankAccount => new BankAccount(bankAccount, credentials));
+    }
+
+    public toJSON(): Partial<BankAccount> {
+        return omit(this, ['credentials']);
     }
 }
