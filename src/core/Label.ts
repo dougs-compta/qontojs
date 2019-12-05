@@ -38,8 +38,8 @@ export class Label {
 
             pagination = meta;
 
-            if (!rawLabels) throw new Error('Unable to find organization\'s labels');
-            get = get.concat(rawLabels.map(rawLabel => new Label(rawLabel)));
+            if (!rawLabels) throw new Error(`Unable to find organization's labels`);
+            get = get.concat(rawLabels.map((rawLabel: ILabel) => new Label(rawLabel)));
         }
 
         return get;
