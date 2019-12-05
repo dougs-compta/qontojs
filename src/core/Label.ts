@@ -51,4 +51,5 @@ export class Label {
         if (!label) throw new Error('Unable to find the label with the id ' + id);
         return label;
     }
+
 }
