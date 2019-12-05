@@ -7,18 +7,19 @@ import { ICredentials } from '../interfaces/credentials.interface';
 export class Label {
     public readonly id: string;
     public readonly name: string;
-    public readonly parent_id: string;
+    public readonly parentId: string;
 
     constructor(data: ILabel) {
         this.id = data.id;
         this.name = data.name;
-        this.parent_id = data.parent_id;
+        this.parentId = data.parent_id;
     }
 
     static async get(credentials: ICredentials): Promise<Label[]> {
         let pagination = {
             next_page: 1
         };
+
         let get: Label[] = [];
 
         while (pagination.next_page) {
@@ -37,7 +38,7 @@ export class Label {
 
             pagination = meta;
 
-            if (!rawLabels) throw new Error("Unable to find organization's labels");
+            if (!rawLabels) throw new Error('Unable to find organization\'s labels');
             get = get.concat(rawLabels.map(rawLabel => new Label(rawLabel)));
         }
 
@@ -45,7 +46,7 @@ export class Label {
     }
 
     static async getById(id: string, credentials: ICredentials, labelsCached?: Label[]): Promise<Label> {
-        let labels = Array.isArray(labelsCached) ? labelsCached : await this.get(credentials);
+        const labels = Array.isArray(labelsCached) ? labelsCached : await this.get(credentials);
         const label = labels.find(l => l.id === id);
         if (!label) throw new Error('Unable to find the label with the id ' + id);
         return label;
