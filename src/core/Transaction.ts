@@ -5,7 +5,6 @@ import { omit } from 'lodash';
 import { Label } from './Label';
 
 export class Transaction {
-
     private credentials: ICredentials;
     private _attachments: Attachment[] = [];
     private _labels: Label[] = [];
@@ -36,7 +35,7 @@ export class Transaction {
         return this._attachments;
     }
 
-    public get labels(): Label[]{
+    public get labels(): Label[] {
         return this._labels;
     }
 
@@ -83,9 +82,9 @@ export class Transaction {
 
     public async fetchLabels(labelsCached?: Label[]): Promise<Label[]> {
         this._labels = [];
-        for(const labelId of this.labelIds){
+        for (const labelId of this.labelIds) {
             const label = await Label.getById(labelId, this.credentials, labelsCached);
-            if(label) this._labels.push(label);
+            if (label) this._labels.push(label);
         }
         return this._labels;
     }
