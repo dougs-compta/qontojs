@@ -3,4 +3,5 @@ export interface ITransactionsFetchOptions {
     perPage?: number;
     sortBy?: string;
     status?: Array<'pending' | 'reversed' | 'declined' | 'completed'>;
+    getLabels?: boolean;
 }

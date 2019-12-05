@@ -5,6 +5,7 @@ export const transactionsJson = {
             amount: 0.78,
             amount_cents: 78,
             attachment_ids: ['02a86187-e6b9-480e-a475-83b3z1956ef5'],
+            label_ids: ['80188ce8-b94d-4e58-8a00-92c4422a92b8'],
             local_amount: 0.78,
             local_amount_cents: 78,
             side: 'debit',

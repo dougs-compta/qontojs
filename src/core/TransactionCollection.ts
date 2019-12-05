@@ -6,11 +6,15 @@ import { ITransaction } from '../interfaces/transaction.interface';
 import { ITransactionsFetchOptions } from '../interfaces/transactionsOptions.interface';
 import { Transaction } from './Transaction';
 import { omit } from 'lodash';
+import { Label } from './Label';
 
 export class TransactionCollection extends Array<Transaction> {
+
     private credentials: ICredentials;
     private bankAccount: BankAccount;
-
+    
+    private _labelsCached : Label[];
+   
     private nextPage: number = 1;
     private prevPage: number = null;
     private fetchOptions: ITransactionsFetchOptions = {};
@@ -72,6 +76,7 @@ export class TransactionCollection extends Array<Transaction> {
      * @private
      */
     private async _fetch(fetchOptions: ITransactionsFetchOptions): Promise<this> {
+
         const { transactions: rawTransactions, meta } = await rp({
             uri: `${HOSTNAME}/${TRANSACTIONS_PATH}`,
             qs: {
@@ -95,11 +100,18 @@ export class TransactionCollection extends Array<Transaction> {
         });
 
         this.length = 0;
-        this.push(
-            ...rawTransactions.map((rawTransaction: ITransaction) => {
-                return new Transaction(rawTransaction, this.credentials);
-            })
-        );
+
+        if(fetchOptions.getLabels === true && !this._labelsCached) {
+            this._labelsCached = await Label.get(this.credentials);
+        }
+
+        for await(let rawTransaction of (<Array<ITransaction>>rawTransactions)) {
+            let transaction = new Transaction(rawTransaction, this.credentials);
+            if(fetchOptions.getLabels === true) {
+                await transaction.fetchLabels(this._labelsCached);
+            }
+            this.push(transaction);
+        }
 
         this.nextPage = meta.next_page;
         this.prevPage = meta.prev_page;
