@@ -29,6 +29,10 @@ export class TransactionCollection extends Array<Transaction> {
         this.setFetchOptions();
     }
 
+    private async _refreshLabelsCache() {
+        if (this.fetchOptions.getLabels === true) this._labelsCached = await Label.get(this.credentials);
+    }
+
     /***
      * Return the transactions located on the next
      * page and store the new transactions in the actual repository.
@@ -38,7 +42,7 @@ export class TransactionCollection extends Array<Transaction> {
      * @param {ITransactionsFetchOptions} fetchOptions
      * @return {Promise<this>}
      */
-    public setFetchOptions(fetchOptions: ITransactionsFetchOptions = {}) {
+    public async setFetchOptions(fetchOptions: ITransactionsFetchOptions = {}) {
         this.length = 0;
         this.fetchOptions = fetchOptions || {};
         this.nextPage = 1;
@@ -58,6 +62,7 @@ export class TransactionCollection extends Array<Transaction> {
      */
     public async fetchNextPage(): Promise<this> {
         if (!this.hasNext) return this;
+        await this._refreshLabelsCache();
         return await this._fetch({
             ...this.fetchOptions,
             perPage: 100
@@ -98,10 +103,6 @@ export class TransactionCollection extends Array<Transaction> {
         });
 
         this.length = 0;
-
-        if (fetchOptions.getLabels === true && !this._labelsCached) {
-            this._labelsCached = await Label.get(this.credentials);
-        }
 
         for (const rawTransaction of rawTransactions) {
             const transaction = new Transaction(rawTransaction, this.credentials);
