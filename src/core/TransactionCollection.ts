@@ -103,7 +103,7 @@ export class TransactionCollection extends Array<Transaction> {
             this._labelsCached = await Label.get(this.credentials);
         }
 
-        for await (const rawTransaction of rawTransactions) {
+        for (const rawTransaction of rawTransactions) {
             const transaction = new Transaction(rawTransaction, this.credentials);
             if (fetchOptions.getLabels === true) {
                 await transaction.fetchLabels(this._labelsCached);
