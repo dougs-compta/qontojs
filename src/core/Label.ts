@@ -20,7 +20,7 @@ export class Label {
             next_page: 1
         };
 
-        let labels: Label[] = [];
+        const labels: Label[] = [];
 
         while (pagination.next_page) {
             const { labels: rawLabels, meta } = await rp({
@@ -39,7 +39,7 @@ export class Label {
             pagination = meta;
 
             if (!rawLabels) throw new Error(`Unable to find organization's labels`);
-            labels = labels.concat(rawLabels.map((rawLabel: ILabel) => new Label(rawLabel)));
+            labels.push(...rawLabels.map((rawLabel: ILabel) => new Label(rawLabel)));
         }
 
         return labels;
