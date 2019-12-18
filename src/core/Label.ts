@@ -20,7 +20,7 @@ export class Label {
             next_page: 1
         };
 
-        let get: Label[] = [];
+        let labels: Label[] = [];
 
         while (pagination.next_page) {
             const { labels: rawLabels, meta } = await rp({
@@ -39,10 +39,10 @@ export class Label {
             pagination = meta;
 
             if (!rawLabels) throw new Error(`Unable to find organization's labels`);
-            get = get.concat(rawLabels.map((rawLabel: ILabel) => new Label(rawLabel)));
+            labels = labels.concat(rawLabels.map((rawLabel: ILabel) => new Label(rawLabel)));
         }
 
-        return get;
+        return labels;
     }
 
     static async getById(id: string, credentials: ICredentials, labelsCached?: Label[]): Promise<Label> {
@@ -51,5 +51,4 @@ export class Label {
         if (!label) throw new Error('Unable to find the label with the id ' + id);
         return label;
     }
-
 }
