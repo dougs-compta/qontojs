@@ -80,12 +80,13 @@ export class Transaction {
         return this._attachments;
     }
 
-    public async fetchLabels(labelsCached?: Label[]): Promise<Label[]> {
-        this._labels = [];
-        for (const labelId of this.labelIds) {
-            const label = await Label.getById(labelId, this.credentials, labelsCached);
-            if (label) this._labels.push(label);
+    public setLabels(labels: Label[]): Label[] {
+        if (labels.length > 0) {
+            this._labels = this.labelIds.map(id => labels.find(label => label.id === id));
+        } else {
+            this._labels = [];
         }
+
         return this._labels;
     }
 

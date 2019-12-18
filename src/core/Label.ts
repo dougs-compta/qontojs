@@ -44,11 +44,4 @@ export class Label {
 
         return labels;
     }
-
-    static async getById(id: string, credentials: ICredentials, labelsCached?: Label[]): Promise<Label> {
-        const labels = Array.isArray(labelsCached) ? labelsCached : await this.get(credentials);
-        const label = labels.find(l => l.id === id);
-        if (!label) throw new Error('Unable to find the label with the id ' + id);
-        return label;
-    }
 }

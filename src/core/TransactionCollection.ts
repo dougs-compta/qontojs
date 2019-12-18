@@ -12,8 +12,6 @@ export class TransactionCollection extends Array<Transaction> {
     private credentials: ICredentials;
     private bankAccount: BankAccount;
 
-    private _labelsCached: Label[];
-
     private nextPage: number = 1;
     private prevPage: number = null;
     private fetchOptions: ITransactionsFetchOptions = {};
@@ -27,10 +25,6 @@ export class TransactionCollection extends Array<Transaction> {
         this.credentials = credentials;
         this.bankAccount = bankAccount;
         this.setFetchOptions();
-    }
-
-    private async _refreshLabelsCache() {
-        if (this.fetchOptions.getLabels === true) this._labelsCached = await Label.get(this.credentials);
     }
 
     /***
@@ -62,7 +56,6 @@ export class TransactionCollection extends Array<Transaction> {
      */
     public async fetchNextPage(): Promise<this> {
         if (!this.hasNext) return this;
-        await this._refreshLabelsCache();
         return await this._fetch({
             ...this.fetchOptions,
             perPage: 100
@@ -104,11 +97,11 @@ export class TransactionCollection extends Array<Transaction> {
 
         this.length = 0;
 
+        const labels = fetchOptions.getLabels === true ? await Label.get(this.credentials) : [];
+
         for (const rawTransaction of rawTransactions) {
             const transaction = new Transaction(rawTransaction, this.credentials);
-            if (fetchOptions.getLabels === true) {
-                await transaction.fetchLabels(this._labelsCached);
-            }
+            if (fetchOptions.getLabels === true) transaction.setLabels(labels);
             this.push(transaction);
         }
 
