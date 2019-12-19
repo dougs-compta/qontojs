@@ -2,7 +2,7 @@ import { Attachment } from './Attachments';
 import { ICredentials } from '../interfaces/credentials.interface';
 import { ITransaction } from '../interfaces/transaction.interface';
 import { omit } from 'lodash';
-import { Label } from './Label';
+import { Label, LabelNotFoundError } from './Label';
 
 export class Transaction {
     private credentials: ICredentials;
@@ -80,13 +80,15 @@ export class Transaction {
         return this._attachments;
     }
 
-    public setLabels(labels: Label[]): Label[] {
-        if (labels.length > 0) {
-            this._labels = this.labelIds.map(id => labels.find(label => label.id === id));
-        } else {
-            this._labels = [];
+    public applyLabels(labels: Label[]): Label[] {
+        this._labels.length = 0;
+        if (labels.length && this.labelIds.length) {
+            for (let labelId of this.labelIds) {
+                const label = labels.find(l => l.id === labelId);
+                if (!label) throw new LabelNotFoundError(`Unable to find label for id ${labelId}`);
+                this._labels.push(label);
+            }
         }
-
         return this._labels;
     }
 
