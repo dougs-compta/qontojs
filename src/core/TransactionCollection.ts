@@ -36,7 +36,7 @@ export class TransactionCollection extends Array<Transaction> {
      * @param {ITransactionsFetchOptions} fetchOptions
      * @return {Promise<this>}
      */
-    public async setFetchOptions(fetchOptions: ITransactionsFetchOptions = {}) {
+    public setFetchOptions(fetchOptions: ITransactionsFetchOptions = {}) {
         this.length = 0;
         this.fetchOptions = fetchOptions || {};
         this.nextPage = 1;
