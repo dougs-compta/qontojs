@@ -37,8 +37,6 @@ export class Label {
             });
 
             pagination = meta;
-
-            if (!rawLabels) throw new Error(`Unable to find organization's labels`);
             labels.push(...rawLabels.map((rawLabel: ILabel) => new Label(rawLabel)));
         }
 
