@@ -4,8 +4,6 @@ import { LABELS_PATH, HOSTNAME } from '../constant';
 import { ILabel } from '../interfaces/label.interface';
 import { ICredentials } from '../interfaces/credentials.interface';
 
-export class LabelNotFoundError extends Error {}
-
 export class Label {
     public readonly id: string;
     public readonly name: string;

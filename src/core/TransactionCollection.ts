@@ -6,7 +6,8 @@ import { ITransaction } from '../interfaces/transaction.interface';
 import { ITransactionsFetchOptions } from '../interfaces/transactionsOptions.interface';
 import { Transaction } from './Transaction';
 import { omit } from 'lodash';
-import { Label, LabelNotFoundError } from './Label';
+import { Label } from './Label';
+import { LabelNotFoundError } from '../errors/LabelNotFoundError';
 
 export class TransactionCollection extends Array<Transaction> {
     private credentials: ICredentials;
