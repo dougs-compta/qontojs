@@ -6,6 +6,8 @@ import { ITransaction } from '../interfaces/transaction.interface';
 import { ITransactionsFetchOptions } from '../interfaces/transactionsOptions.interface';
 import { Transaction } from './Transaction';
 import { omit } from 'lodash';
+import { Label } from './Label';
+import { LabelNotFoundError } from '../errors/LabelNotFoundError';
 
 export class TransactionCollection extends Array<Transaction> {
     private credentials: ICredentials;
@@ -95,11 +97,22 @@ export class TransactionCollection extends Array<Transaction> {
         });
 
         this.length = 0;
-        this.push(
-            ...rawTransactions.map((rawTransaction: ITransaction) => {
-                return new Transaction(rawTransaction, this.credentials);
-            })
-        );
+
+        let labels = fetchOptions.getLabels === true ? await Label.get(this.credentials) : [];
+
+        for (const rawTransaction of rawTransactions) {
+            const transaction = new Transaction(rawTransaction, this.credentials);
+            if (fetchOptions.getLabels === true) {
+                try {
+                    transaction.applyLabels(labels);
+                } catch (e) {
+                    if (!(e instanceof LabelNotFoundError)) throw e;
+                    labels = await Label.get(this.credentials);
+                    transaction.applyLabels(labels);
+                }
+            }
+            this.push(transaction);
+        }
 
         this.nextPage = meta.next_page;
         this.prevPage = meta.prev_page;

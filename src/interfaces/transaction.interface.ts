@@ -5,6 +5,7 @@ export interface ITransaction {
     currency: string;
     emitted_at: Date;
     label: string;
+    label_ids: string[];
     local_amount_cents: number;
     local_currency: string;
     local_amount: number;

@@ -2,10 +2,13 @@ import { Attachment } from './Attachments';
 import { ICredentials } from '../interfaces/credentials.interface';
 import { ITransaction } from '../interfaces/transaction.interface';
 import { omit } from 'lodash';
+import { Label } from './Label';
+import { LabelNotFoundError } from '../errors/LabelNotFoundError';
 
 export class Transaction {
     private credentials: ICredentials;
     private _attachments: Attachment[] = [];
+    private _labels: Label[] = [];
 
     public readonly amount: number;
     public readonly amountCents: number;
@@ -13,6 +16,7 @@ export class Transaction {
     public readonly currency: string;
     public readonly emittedAt: Date;
     public readonly label: string;
+    public readonly labelIds: string[];
     public readonly localAmount: number;
     public readonly localAmountCents: number;
     public readonly localCurrency: string;
@@ -32,6 +36,10 @@ export class Transaction {
         return this._attachments;
     }
 
+    public get labels(): Label[] {
+        return this._labels;
+    }
+
     constructor(data: ITransaction, credentials: ICredentials) {
         this.credentials = credentials;
         this.amount = data.amount;
@@ -40,6 +48,7 @@ export class Transaction {
         this.currency = data.currency;
         this.emittedAt = data.emitted_at;
         this.label = data.label;
+        this.labelIds = data.label_ids;
         this.localAmount = data.local_amount;
         this.localAmountCents = data.local_amount_cents;
         this.localCurrency = data.local_currency;
@@ -69,8 +78,19 @@ export class Transaction {
             const attachment = await Attachment.get(attachmentId, this.credentials);
             if (attachment) this._attachments.push(attachment);
         }
-
         return this._attachments;
+    }
+
+    public applyLabels(labels: Label[]): Label[] {
+        this._labels.length = 0;
+        if (labels.length && this.labelIds.length) {
+            for (const labelId of this.labelIds) {
+                const label = labels.find(l => l.id === labelId);
+                if (!label) throw new LabelNotFoundError(`Unable to find label for id ${labelId}`);
+                this._labels.push(label);
+            }
+        }
+        return this._labels;
     }
 
     public toJSON(): Partial<Transaction> {

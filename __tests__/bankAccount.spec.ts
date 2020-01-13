@@ -60,6 +60,7 @@ describe('The BankAccount', function() {
     });
 
     describe('The transaction', function() {
+
         it('should be able to fetch its attachments', async function() {
             const bankAccounts = await BankAccount.fetch(credentials);
             const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
@@ -94,5 +95,23 @@ describe('The BankAccount', function() {
 
             expect(fileStream instanceof stream.Readable).toEqual(true);
         });
+
+        it('should be able to fetch its labels', async function() {
+
+            const bankAccounts = await BankAccount.fetch(credentials);
+            const bankAccount = bankAccounts.find(b => b.slug === bankAccountSlug);
+
+            bankAccount.transactionCollection.setFetchOptions({
+                getLabels: true
+            });
+
+            const transactions = await bankAccount.transactionCollection.fetchNextPage();
+
+            expect(transactions.length).toEqual(1);
+            expect(transactions[0].labelIds.length).toEqual(1);
+            expect(transactions[0].labels.length).toEqual(1);
+
+        });
+
     });
 });
