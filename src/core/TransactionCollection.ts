@@ -59,7 +59,7 @@ export class TransactionCollection extends Array<Transaction> {
         if (!this.hasNext) return this;
         return await this._fetch({
             ...this.fetchOptions,
-            perPage: 100
+            perPage: 100,
         });
     }
 
@@ -84,16 +84,16 @@ export class TransactionCollection extends Array<Transaction> {
                 status: fetchOptions.status,
                 filters: {
                     updated_at_from: fetchOptions.filters && fetchOptions.filters.updatedAtFrom,
-                    updated_at_to: fetchOptions.filters && fetchOptions.filters.updatedAtTo
+                    updated_at_to: fetchOptions.filters && fetchOptions.filters.updatedAtTo,
                 },
-                sortBy: fetchOptions.sortBy
+                sortBy: fetchOptions.sortBy,
             },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `${this.credentials.slug}:${this.credentials.secretKey}`
+                Authorization: `${this.credentials.slug}:${this.credentials.secretKey}`,
             },
-            json: true
+            json: true,
         });
 
         this.length = 0;

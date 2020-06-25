@@ -37,9 +37,9 @@ export class BankAccount {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `${credentials.slug}:${credentials.secretKey}`
+                Authorization: `${credentials.slug}:${credentials.secretKey}`,
             },
-            json: true
+            json: true,
         });
         return organization.bank_accounts.map(bankAccount => new BankAccount(bankAccount, credentials));
     }

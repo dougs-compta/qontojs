@@ -17,7 +17,7 @@ export class Label {
 
     static async get(credentials: ICredentials): Promise<Label[]> {
         let pagination = {
-            next_page: 1
+            next_page: 1,
         };
 
         const labels: Label[] = [];
@@ -27,13 +27,13 @@ export class Label {
                 uri: `${HOSTNAME}/${LABELS_PATH}`,
                 method: 'GET',
                 qs: {
-                    current_page: pagination.next_page
+                    current_page: pagination.next_page,
                 },
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `${credentials.slug}:${credentials.secretKey}`
+                    Authorization: `${credentials.slug}:${credentials.secretKey}`,
                 },
-                json: true
+                json: true,
             });
 
             pagination = meta;

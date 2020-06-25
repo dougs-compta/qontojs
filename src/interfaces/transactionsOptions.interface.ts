@@ -2,6 +2,6 @@ export interface ITransactionsFetchOptions {
     filters?: { updatedAtFrom: string; updatedAtTo: string };
     perPage?: number;
     sortBy?: string;
-    status?: Array<'pending' | 'reversed' | 'declined' | 'completed'>;
+    status?: ('pending' | 'reversed' | 'declined' | 'completed')[];
     getLabels?: boolean;
 }

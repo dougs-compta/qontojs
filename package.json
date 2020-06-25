@@ -1,7 +1,7 @@
 {
   "name": "@dougs-compta/qontojs",
   "version": "1.1.0",
-  "description": "Qonto api wrapper for nodejs (javascript/typescript)",
+  "description": "Qonto API wrapper for nodejs (javascript/typescript)",
   "keywords": [
     "qonto",
     "qontojs",
@@ -38,20 +38,20 @@
   },
   "homepage": "https://github.com/dougs-compta/qontojs#readme",
   "dependencies": {
-    "@types/lodash": "^4.14.123",
-    "@types/node": "^10.12.21",
-    "lodash": "^4.17.11",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "lodash": "^4.17.15",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.0",
-    "jest": "^24.1.0",
-    "nock": "^10.0.6",
-    "prettier": "1.16.4",
-    "ts-jest": "^23.10.5",
-    "tslint": "^5.12.1",
-    "typescript": "^3.3.3"
+    "@types/jest": "^26.0.3",
+    "@types/lodash": "^4.14.157",
+    "@types/node": "^10.12.21",
+    "jest": "^26.1.0",
+    "nock": "^12.0.3",
+    "prettier": "^2.0.5",
+    "ts-jest": "^26.1.1",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
   },
   "jest": {
     "rootDir": "./",

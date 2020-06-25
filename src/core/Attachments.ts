@@ -28,9 +28,9 @@ export class Attachment {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `${credentials.slug}:${credentials.secretKey}`
+                Authorization: `${credentials.slug}:${credentials.secretKey}`,
             },
-            json: true
+            json: true,
         });
         if (!rawAttachment) throw new Error('Unable to find the attachment with the id ' + id);
         return new Attachment(rawAttachment);

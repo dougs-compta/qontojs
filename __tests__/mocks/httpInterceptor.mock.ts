@@ -28,7 +28,9 @@ export const activateNockInterceptor = () => {
     nock(HOSTNAME)
         .get(new RegExp(`/${LABELS_PATH}`))
         .reply(200, labelsJson);
-
 };
 
-export const turnOff = () => nock.restore() && nock.cleanAll();
+export const turnOff = () => {
+    nock.restore();
+    nock.cleanAll();
+}
