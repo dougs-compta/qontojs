@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/dougs-compta/qontojs#readme",
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "request": "^2.88.2",
     "request-promise": "^4.2.5"
   },
